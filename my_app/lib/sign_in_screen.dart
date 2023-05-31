@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/services/auth.dart';
 
-class SignInScreen extends StatelessWidget {
+class SignInScreen extends StatefulWidget {
+  @override
+  _SignInScreenState createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
   final AuthService _auth = AuthService();
 
   @override
@@ -12,17 +17,13 @@ class SignInScreen extends StatelessWidget {
       ),
       body: Center(
         child: ElevatedButton(
-          child: Text('Sign In with Google'),
+          child: Text('Sign in with Google'),
           onPressed: () async {
-            try {
-              await _auth.signInWithGoogle();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Sign In Successful')),
-              );
-            } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Sign In Failed')),
-              );
+            String? userUID = await _auth.signInWithGoogle();
+            if (userUID == null) {
+              print('Sign in failed');
+            } else {
+              print('Signed in as: $userUID');
             }
           },
         ),
